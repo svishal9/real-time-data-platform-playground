@@ -4,6 +4,8 @@ This repository is a demo environment for experimenting with a real-time data pl
 
 ## Stack
 
+![Data Platform Architecture](docs/data_flow.png)
+
 - **PostgreSQL**: Relational database for transactional data.
 - **Kafka**: Distributed event streaming platform.
 - **Apache Iceberg**: High-performance table format for huge analytic datasets.
