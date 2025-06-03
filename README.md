@@ -41,6 +41,11 @@ This repository is a demo environment for experimenting with a real-time data pl
    ```sh
    ./go.sh stop
    ```
+   
+4. **Select all rows from the Iceberg table via DuckDB:**
+   ```sh
+   ./go.sh query
+   ```
 
 ### Directory Structure
 

@@ -36,6 +36,10 @@ while true; do
         operations+=( delete )
         shift
         ;;
+    query)
+            operations+=( query )
+            shift
+            ;;
     start)
             operations+=( start )
             shift
@@ -69,6 +73,7 @@ function usage() {
     trace "$0 <command> [--] [options ...]"
     trace "Commands:"
     trace "    delete       Stop the data platform, delete containers and iceberg data from host"
+    trace "    query       Selecting all rows from iceberg table default.test_table via DuckDB"
     trace "    start       Run the data platform"
     trace "    stop      Stop the data platform, retain containers and iceberg data from host"
     trace "Options are passed through to the sub-command."
@@ -78,6 +83,11 @@ function usage() {
 function delete() {
     trace "Deleting containers and iceberg data"
     ./scripts/delete.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
+}
+
+function query() {
+    trace "Checking Docker logs for DuckDB"
+    ./scripts/query.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
 }
 
 function start() {
@@ -101,6 +111,9 @@ if contains usage "${operations[@]}"; then
 fi
 if contains delete "${operations[@]}"; then
     delete
+fi
+if contains query "${operations[@]}"; then
+    query
 fi
 if contains start "${operations[@]}"; then
     start
