@@ -32,10 +32,14 @@ operations=()
 subcommand_opts=()
 while true; do
     case "${1:-}" in
-    start)
-        operations+=( start )
+    delete)
+        operations+=( delete )
         shift
         ;;
+    start)
+            operations+=( start )
+            shift
+            ;;
     stop)
         operations+=( stop )
         shift
@@ -64,11 +68,17 @@ fi
 function usage() {
     trace "$0 <command> [--] [options ...]"
     trace "Commands:"
-    trace "    start       Run the application"
-    trace "    stop      Stop the application"
+    trace "    delete       Stop the data platform, delete containers and iceberg data from host"
+    trace "    start       Run the data platform"
+    trace "    stop      Stop the data platform, retain containers and iceberg data from host"
     trace "Options are passed through to the sub-command."
 }
 
+
+function delete() {
+    trace "Deleting containers and iceberg data"
+    ./scripts/delete.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
+}
 
 function start() {
     trace "Starting app"
@@ -88,6 +98,9 @@ cd "${script_directory}/"
 if contains usage "${operations[@]}"; then
     usage
     exit 1
+fi
+if contains delete "${operations[@]}"; then
+    delete
 fi
 if contains start "${operations[@]}"; then
     start
