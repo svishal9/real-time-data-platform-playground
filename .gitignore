@@ -15,6 +15,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!connect-plugins/tabular-iceberg-kafka-connect-0.6.19/lib/
 lib64/
 parts/
 sdist/
