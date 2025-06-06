@@ -280,37 +280,9 @@ services:
     container_name: duckdb
     depends_on:
       - minio
-    entrypoint: >
-      /bin/sh -c "
-      echo 'Waiting for MinIO to be ready...';
-      while ! nc -z minio 9000; do
-        sleep 1;
-      done;
-      echo 'MinIO is ready, starting querying Duck DB...';
-      echo 'Waiting for Kafka Connect to start listening on http://connect:8083 ⏳';
-      while :; do
-        ./duckdb -c \"
-        INSTALL httpfs;
-        LOAD httpfs;
-        CREATE SECRET secret1 (
-          TYPE S3,
-          KEY_ID 'minio',
-          SECRET 'minio123',
-          REGION 'ap-southeast-2',
-          ENDPOINT 'minio:9000',
-          USE_SSL false
-        );
-        SET s3_endpoint='http://minio:9000';
-        SET s3_access_key_id='minio';
-        SET s3_secret_access_key='minio123';
-        SET s3_region='ap-southeast-2';
-        SET s3_url_style='path';
-        SET unsafe_enable_version_guessing = true;
-        SELECT * FROM iceberg_scan('s3://iceberg/default/test_table');
-        \"
-        sleep 10
-      done"
     tty: true
+    volumes:
+      - ./scripts/query_in_time.sh:/tmp/query_in_time.sh
 
   createConnectors:
     image: cnfldemos/cp-server-connect-datagen:0.6.4-7.6.0

@@ -86,7 +86,7 @@ function delete() {
 }
 
 function query() {
-    trace "Checking Docker logs for DuckDB"
+    trace "Querying DuckDB"
     ./scripts/query.sh "${subcommand_opts[@]:+${subcommand_opts[@]}}"
 }
 
